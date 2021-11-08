@@ -5,11 +5,18 @@
 document.getElementById("btn__reset").addEventListener("click", function () {
   document.getElementById("overlay").style.display = "none";
   phrase = getRandomPhrase();
-  for (var i = 0; i < phrase.length; i++) {
-    console.log(i);
-    document.getElementById("phrase").innerHTML +=
-      '<li class="hide letter"> </li>';
+  phraseArray = phrase.split("");
+
+  phraseArray.forEach(addElement);
+
+  function addElement(element) {
+    console.log(element);
+    document.getElementById(
+      "phrase"
+    ).innerHTML += ` <li class="hide letter ${element} "> </li>`;
   }
+
+  console.log(phraseArray);
 });
 
 phrases = ["hi", "bye", "nine", "fine"];

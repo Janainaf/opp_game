@@ -10,12 +10,20 @@ class Phrase {
     this.phrase = phrase.toLowerCase();
   }
   addPhraseToDisplay() {
-    for (var i = 0; i < phrase.length; i++) {
-      console.log(i);
-      document.getElementById("phrase").innerHTML +=
-        '<li class="hide letter"> </li>';
+    phraseArray = phrase.split("");
+
+    phraseArray.forEach(addElement);
+
+    function addElement(element) {
+      console.log(element);
+      document.getElementById(
+        "phrase"
+      ).innerHTML += ` <li class="hide letter ${element} "> </li>`;
     }
+
+    console.log(phraseArray);
   }
+
   checkLetter() {
     if (this.letter === letter) {
       console.log(letter);
