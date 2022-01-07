@@ -3,53 +3,90 @@
  * Game.js */
 
 class Game {
-  constructor(missed, phrases, activePhrase) {
-    missed = 0;
-    phrases = [
-      "hi",
-      "bye",
-      "nine",
-      "fine",
-    ]; /*an array of five Phrase objects  */
-    activePhrase = null;
+  constructor() {
+    this.missed = 0;
+    this.phrases = [
+      { phrase: "I am sorry" },
+      { phrase: "Please forgive me" },
+      { phrase: "I Thank you" },
+      { phrase: "I love you" },
+      { phrase: "Wish you well" },
+    ];
+    this.activePhrase = null;
   }
+
+  /**
+   * Selects random phrase from phrases property
+   * @return {Object} Phrase object chosen to be used
+   */
+  getRandomPhrase() {
+    let phrase = this.phrases[Math.floor(Math.random() * this.phrases.length)];
+    return phrase;
+    //return an object
+  }
+
+  /**
+   * Begins game by selecting a random phrase and displaying it to user
+   */
 
   startGame() {
     document.getElementById("overlay").style.display = "none";
-    phrase = getRandomPhrase();
-    activePhrase = this.phrase;
-    addPhraseToDisplay(activePhrase);
+    this.activePhrase = this.getRandomPhrase();
+    let passPhrase = new Phrase(this.activePhrase.phrase);
+    passPhrase.addPhraseToDisplay();
+    // console.log(game.activePhrase);
   }
 
-  getRandomPhrase() {
-    phrase = phrases[Math.floor(Math.random() * phrases.length)];
-    return phrase;
-  }
+  handleInteraction(letter) {
+    let phrase = new Phrase(this.activePhrase.phrase);
+    console.log("hello phraqare" + phrase.phrase);
+    let checkPhrase = phrase.phrase.split("");
+    var keys = document.getElementsByClassName("key");
+    for (var i = 0; i < keys.length; i++) {
+      keys.item(i).addEventListener("click", function (e) {
+        e = e || window.event;
+        var target = e.target;
+        phrase.checkLetter(target, letter);
+        console.log("Is there a letter - " + phrase.letter);
 
-  handleInteraction() {
-    //  It checks to see if the button clicked by the player matches a letter in the phrase,
-    // and then directs the game based on a correct or incorrect guess. This method should:
-    // Disable the selected letter’s onscreen keyboard button.
-    // If the phrase does not include the guessed letter, add the wrong CSS class to the selected letter's keyboard button and call the removeLife() method.
-    // If the phrase includes the guessed letter, add the chosen CSS class to the selected letter's keyboard button, call the showMatchedLetter() method on the phrase, and then call the checkForWin() method. If the player has won the game, also call the gameOver() method.
-  }
-
-  removeLife() {
-    missed += 1;
-    if (missed == 5) {
-      gameOver();
+        if (phrase.letter !== "") {
+          console.log("*************helloééé " + phrase.letter);
+          phrase.showMatchedLetter(phrase.letter);
+        }
+      });
     }
   }
 
-  checkForWin() {}
+  // removeLife() {
+  //   missed + 1;
+  //   console.log(missed);
+  //   var heartList = document.querySelector("ol");
+  //   var heartTries = document.querySelectorAll(".tries");
+  //   heartList.removeChild(heartTries[0]);
+  //   heartList.innerHTML +=
+  //     '<li class="tries"><img src="images/lostHeart.png" alt="Heart Icon" height="35" width="30"></li>';
+  //   if (missed === 5) {
+  //     // gameOver();
+  //     document.getElementById("overlay").style.display = null;
+  //     document.getElementById("overlay").classList.add("lose");
+  //     document.getElementById("game-over-message").innerHTML = "Game Over";
+  //   }
+  // }
 
-  gameOver() {
-    document.getElementById("overlay").style.display = "block";
-    document.getElementById("id").classList.remove("start");
-    if (checkForWin == true) {
-      document.getElementById("id").classList.add("win");
-    } else {
-      document.getElementById("id").classList.add("lost");
-    }
-  }
+  // checkForWin() {}
+  // // gameOver() {
+  // //   document.getElementById("overlay").style.display = "block";
+  // //   document.getElementById("id").classList.remove("start");
+  // //   if (checkForWin == true) {
+  // //     document.getElementById("id").classList.add("win");
+  // //   } else {
+  // //     document.getElementById("id").classList.add("lose");
+  // //   }
+  // // }
+
+  // gameOver() {
+  //   document.getElementById("overlay").style.display = null;
+  //   document.getElementById("overlay").classList.add("lose");
+  //   document.getElementById("game-over-message").innerHTML = "Game Over";
+  // }
 }

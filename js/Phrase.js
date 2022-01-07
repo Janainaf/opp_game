@@ -2,32 +2,62 @@
  * Project 4 - OOP Game App
  * Phrase.js */
 
-//         checkLetter(): checks to see if the letter selected by the player matches a letter in the phrase.
-//         showMatchedLetter(): reveals the letter(s) on the board that matches the player's selection. To reveal the matching letter(s), select all of the letter DOM elements that have a CSS class name that matches the selected letter and replace each selected element's hide CSS class with the show CSS class.
-
 class Phrase {
   constructor(phrase) {
     this.phrase = phrase.toLowerCase();
   }
+
+  /**
+   * Display phrase on game board
+   */
+
   addPhraseToDisplay() {
-    phraseArray = phrase.split("");
-
-    phraseArray.forEach(addElement);
-
+    let splitPhrase = this.phrase.split("");
+    splitPhrase.forEach(addElement);
     function addElement(element) {
-      console.log(element);
-      document.getElementById(
-        "phrase"
-      ).innerHTML += ` <li class="hide letter ${element} "> </li>`;
-    }
-
-    console.log(phraseArray);
-  }
-
-  checkLetter() {
-    if (this.letter === letter) {
-      console.log(letter);
+      if (element != " ") {
+        document.getElementById(
+          "phrase"
+        ).innerHTML += `<li class="hide letter ${element}"> ${element}</li>`;
+      } else {
+        document.getElementById(
+          "phrase"
+        ).innerHTML += `<li class="space"> </li>`;
+      }
     }
   }
-  showMatchedLetter() {}
+
+  /**
+   * Checks if passed letter is in phrase
+   * @param (string) letter - Letter to check
+   */
+
+  checkLetter(target, letter) {
+    console.log(this.phrase);
+    let checkPhrase = this.phrase.split("");
+    var keys = document.getElementsByClassName("key");
+    for (var i = 0; i < keys.length; i++) {
+      target.className = "chosen";
+      this.letter = target.innerText || target.innerText;
+      console.log("here we have letter - " + this.letter);
+      let letter = this.letter;
+      return letter;
+    }
+  }
+
+  showMatchedLetter(letter) {
+    let checkPhrase = this.phrase.split("");
+    if (checkPhrase.includes(letter)) {
+      console.log("it is a match, letter " + letter);
+      var divs = document.getElementsByClassName(`letter ${letter}`),
+        i;
+      for (i = 0; i < divs.length; i++) {
+        divs[i].classList.remove("hide");
+        divs[i].classList.add("show");
+      }
+    } else {
+      console.log("NOT A MATCH, letter " + letter);
+    }
+    return this;
+  }
 }
