@@ -41,23 +41,20 @@ class Phrase {
       this.letter = target.innerText || target.innerText;
       console.log("here we have letter - " + this.letter);
       let letter = this.letter;
-      return letter;
+      if (checkPhrase.includes(letter)) {
+        console.log("**** it is a match? " + letter);
+        return letter;
+      }
     }
   }
 
   showMatchedLetter(letter) {
-    let checkPhrase = this.phrase.split("");
-    if (checkPhrase.includes(letter)) {
-      console.log("it is a match, letter " + letter);
-      var divs = document.getElementsByClassName(`letter ${letter}`),
-        i;
-      for (i = 0; i < divs.length; i++) {
-        divs[i].classList.remove("hide");
-        divs[i].classList.add("show");
-      }
-    } else {
-      console.log("NOT A MATCH, letter " + letter);
+    console.log("+++++++ WE WILL SHOW THE LETTER " + letter);
+    var divs = document.getElementsByClassName(`letter ${letter}`),
+      i;
+    for (i = 0; i < divs.length; i++) {
+      divs[i].classList.remove("hide");
+      divs[i].classList.add("show");
     }
-    return this;
   }
 }

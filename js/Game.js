@@ -37,9 +37,20 @@ class Game {
     // console.log(game.activePhrase);
   }
 
+  removeLife(missed) {
+    console.log("calling remove life " + missed);
+    game.missed++;
+    console.log(game.missed);
+    var heartList = document.querySelector("ol");
+    var heartTries = document.querySelectorAll(".tries");
+    heartList.removeChild(heartTries[0]);
+    heartList.innerHTML +=
+      '<li class="tries"><img src="images/lostHeart.png" alt="Heart Icon" height="35" width="30"></li>';
+  }
+
   handleInteraction(letter) {
     let phrase = new Phrase(this.activePhrase.phrase);
-    console.log("hello phraqare" + phrase.phrase);
+    console.log("hello phrase " + phrase.phrase);
     let checkPhrase = phrase.phrase.split("");
     var keys = document.getElementsByClassName("key");
     for (var i = 0; i < keys.length; i++) {
@@ -47,31 +58,19 @@ class Game {
         e = e || window.event;
         var target = e.target;
         phrase.checkLetter(target, letter);
-        console.log("Is there a letter - " + phrase.letter);
+        console.log("Hey there is a letter- " + phrase.letter);
 
-        if (phrase.letter !== "") {
-          console.log("*************helloééé " + phrase.letter);
+        if (phrase.checkLetter(target, letter) != phrase.letter) {
+          console.log("ALERT *** NOT A MATCH " + phrase.letter);
+          game.removeLife(game.missed);
+        } else {
+          // console.log("Not a match i guess" + phrase.letter);
+          console.log("YESSS A MATCHHH+ " + phrase.letter);
           phrase.showMatchedLetter(phrase.letter);
         }
       });
     }
   }
-
-  // removeLife() {
-  //   missed + 1;
-  //   console.log(missed);
-  //   var heartList = document.querySelector("ol");
-  //   var heartTries = document.querySelectorAll(".tries");
-  //   heartList.removeChild(heartTries[0]);
-  //   heartList.innerHTML +=
-  //     '<li class="tries"><img src="images/lostHeart.png" alt="Heart Icon" height="35" width="30"></li>';
-  //   if (missed === 5) {
-  //     // gameOver();
-  //     document.getElementById("overlay").style.display = null;
-  //     document.getElementById("overlay").classList.add("lose");
-  //     document.getElementById("game-over-message").innerHTML = "Game Over";
-  //   }
-  // }
 
   // checkForWin() {}
   // // gameOver() {
@@ -85,6 +84,13 @@ class Game {
   // // }
 
   // gameOver() {
+  // if (missed === 5) {
+  //   // gameOver();
+  //   document.getElementById("overlay").style.display = null;
+  //   document.getElementById("overlay").classList.add("lose");
+  //   document.getElementById("game-over-message").innerHTML = "Game Over";
+  // }
+
   //   document.getElementById("overlay").style.display = null;
   //   document.getElementById("overlay").classList.add("lose");
   //   document.getElementById("game-over-message").innerHTML = "Game Over";
