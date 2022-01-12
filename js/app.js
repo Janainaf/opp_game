@@ -2,31 +2,32 @@
  * Project 4 - OOP Game App
  * app.js */
 
-// let chosen = document.getElementsByClassName("chosen");
-// let win = [];
+function reset() {
+  document.getElementById("phrase").innerHTML = `<li class=""></li>`;
+  Array.from(document.getElementsByClassName("chosen")).forEach(function (
+    item
+  ) {
+    item.classList.remove("chosen");
+    item.classList.add("key");
+  });
 
-// function Clean() {
-//   document.getElementById("phrase").innerHTML = `<li class=""></li>`;
-//   Array.from(document.getElementsByClassName("chosen")).forEach(function (
-//     item
-//   ) {
-//     item.classList.remove("chosen");
-//     item.classList.add("key");
-//   });
+  document.getElementById("overlay").classList.remove("win");
+  document.getElementById("overlay").classList.remove("lose");
 
-//   document.getElementById("overlay").classList.remove("win");
-//   document.getElementById("overlay").classList.remove("lose");
+  Array.from(document.querySelectorAll(".tries")).forEach(function (item) {
+    item.innerHTML =
+      '<img src="images/liveHeart.png" alt="Heart Icon" height="35" width="30">';
+  });
 
-//   Array.from(document.querySelectorAll(".tries")).forEach(function (item) {
-//     item.innerHTML =
-//       '<img src="images/liveHeart.png" alt="Heart Icon" height="35" width="30">';
-//   });
+  var keys = document.getElementsByClassName("key");
+  // keys.outerHTML = keys.outerHTML;
 
-//   // TA UM CAOS - O WIN AND MISSED NAO TA FUNCIONANDOOOO
-//   // ta rolando uma duplicaçao ali no event listener que nao to entendendo, talvez
-//   // verificar o event, mas os else e if tb
-//   // certeza que eh isso porque ele esta limpando certinho mas duplicando quando faço um clique
-// }
+  [].forEach.call(keys, function (key) {
+    key.outerHTML = key.outerHTML;
+
+    // key.removeEventListener("click", false);
+  });
+}
 
 // document.getElementById("btn__reset").addEventListener("click", function () {
 //   Clean();
@@ -99,23 +100,13 @@
 //   }
 // });
 
-// phrases = ["HI there", "I love you", "YOu are the best"];
-
-// function getRandomPhrase() {
-//   phrase = phrases[Math.floor(Math.random() * phrases.length)];
-//   return phrase;
-// }
-
-// function checkLetter() {
-//   if (this.letter === letter) {
-//   }
-// }
-
 // **************** test area *************
 let game;
 
 document.getElementById("btn__reset").addEventListener("click", function () {
+  reset();
   game = new Game();
+  game.missed = 0;
   game.startGame();
   game.handleInteraction();
 });

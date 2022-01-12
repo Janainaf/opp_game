@@ -33,23 +33,19 @@ class Phrase {
    */
 
   checkLetter(target, letter) {
-    console.log(this.phrase);
     let checkPhrase = this.phrase.split("");
     var keys = document.getElementsByClassName("key");
     for (var i = 0; i < keys.length; i++) {
       target.className = "chosen";
       this.letter = target.innerText || target.innerText;
-      console.log("here we have letter - " + this.letter);
       let letter = this.letter;
       if (checkPhrase.includes(letter)) {
-        console.log("**** it is a match? " + letter);
         return letter;
       }
     }
   }
 
   showMatchedLetter(letter) {
-    console.log("+++++++ WE WILL SHOW THE LETTER " + letter);
     var divs = document.getElementsByClassName(`letter ${letter}`),
       i;
     for (i = 0; i < divs.length; i++) {

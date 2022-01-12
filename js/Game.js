@@ -13,6 +13,7 @@ class Game {
       { phrase: "Wish you well" },
     ];
     this.activePhrase = null;
+    console.log(this.missed);
   }
 
   /**
@@ -32,15 +33,16 @@ class Game {
   startGame() {
     document.getElementById("overlay").style.display = "none";
     this.activePhrase = this.getRandomPhrase();
-    let passPhrase = new Phrase(this.activePhrase.phrase);
-    passPhrase.addPhraseToDisplay();
-    // console.log(game.activePhrase);
+    console.log(this.activePhrase.phrase);
+    let phrase = new Phrase(this.activePhrase.phrase);
+    phrase.addPhraseToDisplay();
   }
 
   removeLife(missed) {
-    console.log("calling remove life " + missed);
+    // console.log("calling remove life " + missed);
     game.missed++;
-    console.log(game.missed);
+    // console.log("lives missed " + game.missed);
+
     var heartList = document.querySelector("ol");
     var heartTries = document.querySelectorAll(".tries");
     heartList.removeChild(heartTries[0]);
@@ -48,51 +50,78 @@ class Game {
       '<li class="tries"><img src="images/lostHeart.png" alt="Heart Icon" height="35" width="30"></li>';
   }
 
-  handleInteraction(letter) {
-    let phrase = new Phrase(this.activePhrase.phrase);
-    console.log("hello phrase " + phrase.phrase);
-    let checkPhrase = phrase.phrase.split("");
-    var keys = document.getElementsByClassName("key");
-    for (var i = 0; i < keys.length; i++) {
-      keys.item(i).addEventListener("click", function (e) {
-        e = e || window.event;
-        var target = e.target;
-        phrase.checkLetter(target, letter);
-        console.log("Hey there is a letter- " + phrase.letter);
+  gameOver() {
+    document.getElementById("overlay").style.display = null;
+    document.getElementById("overlay").classList.add("lose");
+    document.getElementById("game-over-message").innerHTML = "Game Over";
+  }
 
-        if (phrase.checkLetter(target, letter) != phrase.letter) {
-          console.log("ALERT *** NOT A MATCH " + phrase.letter);
-          game.removeLife(game.missed);
-        } else {
-          // console.log("Not a match i guess" + phrase.letter);
-          console.log("YESSS A MATCHHH+ " + phrase.letter);
-          phrase.showMatchedLetter(phrase.letter);
-        }
-      });
+  checkForWin() {
+    if (win.length === this.activePhrase.phrase.length) {
+      document.getElementById("overlay").style.display = null;
+      document.getElementById("overlay").classList.add("win");
+      document.getElementById("game-over-message").innerHTML = "You Won";
     }
   }
 
-  // checkForWin() {}
-  // // gameOver() {
-  // //   document.getElementById("overlay").style.display = "block";
-  // //   document.getElementById("id").classList.remove("start");
-  // //   if (checkForWin == true) {
-  // //     document.getElementById("id").classList.add("win");
-  // //   } else {
-  // //     document.getElementById("id").classList.add("lose");
-  // //   }
-  // // }
+  handleInteraction(letter) {
+    let phrase = new Phrase(this.activePhrase.phrase);
+    console.log(phrase);
+    console.log("hello phrase " + phrase.phrase);
+    let checkPhrase = phrase.phrase.split("");
+    let win = [];
+    var keys = document.getElementsByClassName("key");
 
-  // gameOver() {
-  // if (missed === 5) {
-  //   // gameOver();
-  //   document.getElementById("overlay").style.display = null;
-  //   document.getElementById("overlay").classList.add("lose");
-  //   document.getElementById("game-over-message").innerHTML = "Game Over";
-  // }
+    [].forEach.call(keys, function (key) {
+      key.addEventListener("click", listener);
+    });
 
-  //   document.getElementById("overlay").style.display = null;
-  //   document.getElementById("overlay").classList.add("lose");
-  //   document.getElementById("game-over-message").innerHTML = "Game Over";
-  // }
+    function listener(e) {
+      // e = e || window.event;
+      let target = e.target;
+      phrase.checkLetter(target, letter);
+
+      target.removeEventListener("click", listener);
+      e.preventDefault();
+      e.stopPropagation();
+      if (phrase.checkLetter(target, letter) != phrase.letter) {
+        game.removeLife(game.missed);
+        console.log(game.missed);
+        if (game.missed === 5) {
+          console.log("game over pal");
+          game.gameOver();
+        }
+      } else {
+        phrase.showMatchedLetter(phrase.letter);
+      }
+    }
+
+    // [].forEach.call(keys, function (key) {
+    //   key.removeEventListener("click", listener, false);
+    // });
+    // for (var i = 0; i < keys.length; i++) {
+    //   keys.item(i).addEventListener(
+    //     "click",
+    //     function (e) {
+    //       // e = e || window.event;
+    //       var target = e.target;
+    //       phrase.checkLetter(target, letter);
+    //       e.preventDefault();
+
+    //       if (phrase.checkLetter(target, letter) != phrase.letter) {
+    //         game.removeLife(game.missed);
+    //         console.log(game.missed);
+
+    //         if (game.missed === 5) {
+    //           console.log("game over pal");
+    //           game.gameOver();
+    //         }
+    //       } else {
+    //         phrase.showMatchedLetter(phrase.letter);
+    //       }
+    //     },
+    //     false
+    //   );
+    // }
+  }
 }
