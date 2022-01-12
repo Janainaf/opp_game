@@ -57,7 +57,10 @@ class Game {
   }
 
   checkForWin() {
-    if (win.length === this.activePhrase.phrase.length) {
+    var divs = document.getElementsByClassName("show");
+    var noSpace = this.activePhrase.phrase;
+    noSpace = noSpace.replace(/ +/g, "");
+    if (divs.length === noSpace.length) {
       document.getElementById("overlay").style.display = null;
       document.getElementById("overlay").classList.add("win");
       document.getElementById("game-over-message").innerHTML = "You Won";
@@ -66,10 +69,8 @@ class Game {
 
   handleInteraction(letter) {
     let phrase = new Phrase(this.activePhrase.phrase);
-    console.log(phrase);
     console.log("hello phrase " + phrase.phrase);
     let checkPhrase = phrase.phrase.split("");
-    let win = [];
     var keys = document.getElementsByClassName("key");
 
     [].forEach.call(keys, function (key) {
@@ -77,13 +78,12 @@ class Game {
     });
 
     function listener(e) {
-      // e = e || window.event;
+      e = e || window.event;
       let target = e.target;
       phrase.checkLetter(target, letter);
 
       target.removeEventListener("click", listener);
-      e.preventDefault();
-      e.stopPropagation();
+
       if (phrase.checkLetter(target, letter) != phrase.letter) {
         game.removeLife(game.missed);
         console.log(game.missed);
@@ -93,35 +93,8 @@ class Game {
         }
       } else {
         phrase.showMatchedLetter(phrase.letter);
+        game.checkForWin();
       }
     }
-
-    // [].forEach.call(keys, function (key) {
-    //   key.removeEventListener("click", listener, false);
-    // });
-    // for (var i = 0; i < keys.length; i++) {
-    //   keys.item(i).addEventListener(
-    //     "click",
-    //     function (e) {
-    //       // e = e || window.event;
-    //       var target = e.target;
-    //       phrase.checkLetter(target, letter);
-    //       e.preventDefault();
-
-    //       if (phrase.checkLetter(target, letter) != phrase.letter) {
-    //         game.removeLife(game.missed);
-    //         console.log(game.missed);
-
-    //         if (game.missed === 5) {
-    //           console.log("game over pal");
-    //           game.gameOver();
-    //         }
-    //       } else {
-    //         phrase.showMatchedLetter(phrase.letter);
-    //       }
-    //     },
-    //     false
-    //   );
-    // }
   }
 }
