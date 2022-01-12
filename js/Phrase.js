@@ -36,7 +36,6 @@ class Phrase {
     let checkPhrase = this.phrase.split("");
     var keys = document.getElementsByClassName("key");
     for (var i = 0; i < keys.length; i++) {
-      target.className = "chosen";
       this.letter = target.innerText || target.innerText;
       let letter = this.letter;
       if (checkPhrase.includes(letter)) {

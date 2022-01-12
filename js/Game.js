@@ -13,7 +13,6 @@ class Game {
       { phrase: "Wish you well" },
     ];
     this.activePhrase = null;
-    console.log(this.missed);
   }
 
   /**
@@ -39,21 +38,28 @@ class Game {
   }
 
   removeLife(missed) {
-    // console.log("calling remove life " + missed);
     game.missed++;
-    // console.log("lives missed " + game.missed);
 
     var heartList = document.querySelector("ol");
     var heartTries = document.querySelectorAll(".tries");
     heartList.removeChild(heartTries[0]);
     heartList.innerHTML +=
       '<li class="tries"><img src="images/lostHeart.png" alt="Heart Icon" height="35" width="30"></li>';
+    if (game.missed === 5) {
+      this.gameOver();
+    }
   }
 
   gameOver() {
-    document.getElementById("overlay").style.display = null;
-    document.getElementById("overlay").classList.add("lose");
-    document.getElementById("game-over-message").innerHTML = "Game Over";
+    if (game.missed === 5) {
+      document.getElementById("overlay").style.display = null;
+      document.getElementById("overlay").classList.add("lose");
+      document.getElementById("game-over-message").innerHTML = "Game Over";
+    } else {
+      document.getElementById("overlay").style.display = null;
+      document.getElementById("overlay").classList.add("win");
+      document.getElementById("game-over-message").innerHTML = "You Won";
+    }
   }
 
   checkForWin() {
@@ -61,16 +67,12 @@ class Game {
     var noSpace = this.activePhrase.phrase;
     noSpace = noSpace.replace(/ +/g, "");
     if (divs.length === noSpace.length) {
-      document.getElementById("overlay").style.display = null;
-      document.getElementById("overlay").classList.add("win");
-      document.getElementById("game-over-message").innerHTML = "You Won";
+      this.gameOver();
     }
   }
 
   handleInteraction(letter) {
     let phrase = new Phrase(this.activePhrase.phrase);
-    console.log("hello phrase " + phrase.phrase);
-    let checkPhrase = phrase.phrase.split("");
     var keys = document.getElementsByClassName("key");
 
     [].forEach.call(keys, function (key) {
@@ -82,16 +84,23 @@ class Game {
       let target = e.target;
       phrase.checkLetter(target, letter);
 
+      // Disables the selected letters onscreen keyboard button if the phrase does not include the guessed letter
       target.removeEventListener("click", listener);
 
       if (phrase.checkLetter(target, letter) != phrase.letter) {
-        game.removeLife(game.missed);
-        console.log(game.missed);
-        if (game.missed === 5) {
-          console.log("game over pal");
-          game.gameOver();
+        // the wrong css class is added on the checkLetter method
+        let checkPhrase = phrase.phrase.split("");
+        var keys = document.getElementsByClassName("key");
+        for (var i = 0; i < keys.length; i++) {
+          this.letter = target.innerText || target.innerText;
+          let letter = this.letter;
+          if (!checkPhrase.includes(letter)) {
+            target.className = "wrong";
+          }
         }
+        game.removeLife(game.missed);
       } else {
+        target.className = "chosen";
         phrase.showMatchedLetter(phrase.letter);
         game.checkForWin();
       }
