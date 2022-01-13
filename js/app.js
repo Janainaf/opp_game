@@ -34,7 +34,6 @@ let game;
 document.getElementById("btn__reset").addEventListener("click", function () {
   reset();
   game = new Game();
-  game.missed = 0;
   game.startGame();
   game.handleInteraction();
 });

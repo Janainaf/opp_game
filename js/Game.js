@@ -87,16 +87,12 @@ class Game {
       // Disables the selected letters onscreen keyboard button if the phrase does not include the guessed letter
       target.removeEventListener("click", listener);
 
+      // if the phrase does not include letter, the wrong css class is added and removelife is called
       if (phrase.checkLetter(target, letter) != phrase.letter) {
-        // the wrong css class is added on the checkLetter method
-        let checkPhrase = phrase.phrase.split("");
         var keys = document.getElementsByClassName("key");
         for (var i = 0; i < keys.length; i++) {
           this.letter = target.innerText || target.innerText;
-          let letter = this.letter;
-          if (!checkPhrase.includes(letter)) {
-            target.className = "wrong";
-          }
+          target.className = "wrong";
         }
         game.removeLife(game.missed);
       } else {
