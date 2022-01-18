@@ -33,7 +33,7 @@ class Phrase {
    * @param (string) letter - Letter to check
    */
 
-  checkLetter(target, letter) {
+  checkLetter(target) {
     let checkPhrase = this.phrase.split("");
     var keys = document.getElementsByClassName("key");
     for (var i = 0; i < keys.length; i++) {
