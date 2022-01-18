@@ -6,11 +6,11 @@ class Game {
   constructor() {
     this.missed = 0;
     this.phrases = [
-      { phrase: "I am sorry" },
-      { phrase: "Please forgive me" },
-      { phrase: "I Thank you" },
-      { phrase: "I love you" },
-      { phrase: "Wish you well" },
+      new Phrase("I am sorry"),
+      new Phrase("Please forgive me"),
+      new Phrase("I Thank you"),
+      new Phrase("I love you"),
+      new Phrase("Wish you well"),
     ];
     this.activePhrase = null;
   }
@@ -20,8 +20,9 @@ class Game {
    * @return {Object} Phrase object chosen to be used
    */
   getRandomPhrase() {
-    let phrase = this.phrases[Math.floor(Math.random() * this.phrases.length)];
-    return phrase;
+    let randomPhrase =
+      this.phrases[Math.floor(Math.random() * this.phrases.length)];
+    return randomPhrase;
     //return an object
   }
 
@@ -32,26 +33,23 @@ class Game {
   startGame() {
     document.getElementById("overlay").style.display = "none";
     this.activePhrase = this.getRandomPhrase();
-    console.log(this.activePhrase.phrase);
-    let phrase = new Phrase(this.activePhrase.phrase);
-    phrase.addPhraseToDisplay();
+    this.activePhrase.addPhraseToDisplay();
   }
 
-  removeLife(missed) {
-    game.missed++;
-
+  removeLife() {
+    this.missed++;
     var heartList = document.querySelector("ol");
     var heartTries = document.querySelectorAll(".tries");
     heartList.removeChild(heartTries[0]);
     heartList.innerHTML +=
       '<li class="tries"><img src="images/lostHeart.png" alt="Heart Icon" height="35" width="30"></li>';
-    if (game.missed === 5) {
+    if (this.missed === 5) {
       this.gameOver();
     }
   }
 
   gameOver() {
-    if (game.missed === 5) {
+    if (this.missed === 5) {
       document.getElementById("overlay").style.display = null;
       document.getElementById("overlay").classList.add("lose");
       document.getElementById("game-over-message").innerHTML = "Game Over";
@@ -72,14 +70,10 @@ class Game {
   }
 
   handleInteraction(letter) {
-    let phrase = new Phrase(this.activePhrase.phrase);
     var keys = document.getElementsByClassName("key");
+    let phrase = this.activePhrase;
 
-    [].forEach.call(keys, function (key) {
-      key.addEventListener("click", listener);
-    });
-
-    function listener(e) {
+    let listener = (e) => {
       e = e || window.event;
       let target = e.target;
       phrase.checkLetter(target, letter);
@@ -90,16 +84,21 @@ class Game {
       // if the phrase does not include letter, the wrong css class is added and removelife is called
       if (phrase.checkLetter(target, letter) != phrase.letter) {
         var keys = document.getElementsByClassName("key");
+        this.removeLife(this.missed);
+
         for (var i = 0; i < keys.length; i++) {
           this.letter = target.innerText || target.innerText;
           target.className = "wrong";
         }
-        game.removeLife(game.missed);
       } else {
         target.className = "chosen";
         phrase.showMatchedLetter(phrase.letter);
-        game.checkForWin();
+        this.checkForWin();
       }
-    }
+    };
+
+    [].forEach.call(keys, function (key) {
+      key.addEventListener("click", listener);
+    });
   }
 }

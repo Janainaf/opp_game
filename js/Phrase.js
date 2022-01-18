@@ -12,6 +12,7 @@ class Phrase {
    */
 
   addPhraseToDisplay() {
+    console.log(this.phrase);
     let splitPhrase = this.phrase.split("");
     splitPhrase.forEach(addElement);
     function addElement(element) {
